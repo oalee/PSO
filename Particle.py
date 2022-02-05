@@ -1,6 +1,15 @@
 import random
 import numpy as np
 
+
+def rosenbroch_gradient(x):
+    a = 0
+    b = 1
+    dx1 = -2 * (a - x[0]) + b * -4 * x[0] * (x[1] - (x[0] ** 2))
+    dx2 = 2 * b * (x[1] - (x[0] ** 2))
+    return [dx1, dx2]
+
+
 max_velocity = 0.5
 
 
@@ -12,13 +21,15 @@ class Globals:
 
 
 class Particle:
-    def __init__(self, globals, objective_function, position_range=100):
+    # D is the gradient hyper parameter
+    def __init__(self, globals, objective_function, position_range=100, d=0):
         self.globals = globals
         self.position = []
         self.velocity = []
         self.personal_best_position = []
         self.objective_function = objective_function
         self.all_fitnesses = []
+        self.d = d
 
         # initialize the position and velocity of particle
         for i in range(self.globals.n_dimension):
@@ -37,10 +48,12 @@ class Particle:
             # maybe have R1, R2 etc?
             R = random.random()
             b, c = 2, 2
+            gradient = rosenbroch_gradient(self.position)
             new_velocity = (
                     a * self.velocity[i]
                     + b * R * (self.personal_best_position[i] - self.position[i])
                     + c * R * (self.globals.best_position[i] - self.position[i])
+                    - self.d * a * gradient[i]
             )
             # cap velocity at
             if abs(new_velocity) > max_velocity:

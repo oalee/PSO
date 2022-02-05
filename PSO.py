@@ -1,3 +1,5 @@
+import random
+
 from InertiaStrategies import DynamicAdaptiveStrategy, RandomInertiaEvolutionaryStrategy
 from ObjectiveFunctions import f_rosenbrock
 from Particle import Particle, Globals
@@ -9,13 +11,16 @@ def f(x):
     return 2 * x[0] ** 2 - 8 * x[0] + 1
 
 
-def PSO(objective_function, n_particles, iterations, n_param, inertia_strategy, guess_random_range):
+def PSO(objective_function, n_particles, iterations, n_param,
+        inertia_strategy, guess_random_range, gradient_coeff,
+        seed=random.randint(0, 412312312312)):
     # initialize the particles
     particles = []
+    random.seed(seed)
 
     globals = Globals(n_param)
     for i in range(n_particles):
-        particle = Particle(globals, objective_function, guess_random_range)
+        particle = Particle(globals, objective_function, guess_random_range, gradient_coeff)
         particles.append(particle)
 
     positions = []
@@ -44,7 +49,8 @@ def PSO(objective_function, n_particles, iterations, n_param, inertia_strategy, 
                                 n_particles=10,
                                 iterations=100,
                                 inertia_strategy=RandomInertiaEvolutionaryStrategy(),
-                                guess_random_range=60
+                                guess_random_range=70,
+                                gradient_coeff=0.6
                                 )
 
 print(position)

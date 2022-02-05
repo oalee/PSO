@@ -23,12 +23,12 @@ def f_rastrigin(x):
     return value
 
 
-def PSO(objective_function, n_particles, iterations, n_param, inertia_strategy):
+def PSO(objective_function, n_particles, iterations, n_param, inertia_strategy, guess_random_range):
     # initialize the particles
     particles = []
     globals = Globals(n_param)
     for i in range(n_particles):
-        particle = Particle(globals, objective_function)
+        particle = Particle(globals, objective_function, guess_random_range)
         particles.append(particle)
 
     positions = []
@@ -58,7 +58,9 @@ value, position = PSO(
     n_param=2,
     n_particles=10,
     iterations=100,
-    inertia_strategy=RandomInertiaEvolutionaryStrategy()
+    inertia_strategy=DynamicAdaptiveStrategy(100),
+    guess_random_range=50
+
 )
 # gives the wrong position but correct minimum
 print(position)

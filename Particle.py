@@ -12,7 +12,7 @@ class Globals:
 
 
 class Particle:
-    def __init__(self, globals, objective_function):
+    def __init__(self, globals, objective_function, position_range=100):
         self.globals = globals
         self.position = []
         self.velocity = []
@@ -22,7 +22,7 @@ class Particle:
 
         # initialize the position and velocity of particle
         for i in range(self.globals.n_dimension):
-            self.position.append(random.uniform(-1, 1))
+            self.position.append(random.uniform(-position_range, position_range))
             self.personal_best_position.append(random.uniform(-1, 1))
             self.velocity.append(random.uniform(-1, 1))
             self.globals.best_position.append(random.uniform(-1, 1))

@@ -15,18 +15,18 @@ def f_rosenbrock(x):
     return (a - x[0]) ** 2 + b * (x[1] - x[0] ** 2) ** 2
 
 def f_rastrigin(x):
-    Y = (x[0] ** 2 - 10 * np.cos(2 * np.pi * x[0])) + \
+    value = (x[0] ** 2 - 10 * np.cos(2 * np.pi * x[0])) + \
         (x[1] ** 2 - 10 * np.cos(2 * np.pi * x[1])) + 20
-    return Y
+    return value
 
 
 
-def PSO(objective_function, start_location, n_particles, iterations):
+def PSO(objective_function, n_particles, iterations, n_param):
     # initialize the particles
     particles = []
-    globals = Globals(len(start_location))
+    globals = Globals(n_param)
     for i in range(n_particles):
-        particle = Particle(globals, start_location, objective_function)
+        particle = Particle(globals, objective_function)
         particles.append(particle)
 
     # TODO will do this in a betterway, but it works!
@@ -55,7 +55,7 @@ def PSO(objective_function, start_location, n_particles, iterations):
 
 value, position = PSO(
     objective_function=f_rosenbrock,
-    start_location=[1, 2],
+    n_param=2,
     n_particles=10,
     iterations=100,
 )

@@ -1,11 +1,7 @@
 import random
 import numpy as np
 
-# g_best_position = []
-# g_best_value = float("inf")
-
 max_velocity = 0.5
-
 
 class Globals:
     def __init__(self, n_dimension):
@@ -15,7 +11,7 @@ class Globals:
 
 
 class Particle:
-    def __init__(self, globals, start_location, objective_function):
+    def __init__(self, globals, objective_function):
         self.globals = globals
         self.position = []
         self.velocity = []
@@ -31,16 +27,16 @@ class Particle:
 
         self.fitness = objective_function(self.position)
 
-    def update(self, w):
+    def update(self, a):
 
 
         # calculate and update position and velocity
         for i in range(self.globals.n_dimension):
             # maybe have R1, R2 etc?
             R = random.random()
-            a, b, c = 0.2, 2, 2
+            b, c =  2, 2
             new_velocity = (
-                w * self.velocity[i]
+                a * self.velocity[i]
                 + b * R * (self.personal_best_position[i] - self.position[i])
                 + c * R * (self.globals.best_position[i] - self.position[i])
             )
@@ -59,7 +55,7 @@ class Particle:
         new_fitness = self.objective_function(self.position)
 
         if new_fitness < self.fitness:
-            self.personal_best_position = self.position
+            self.personal_best_position = self.position.copy()
             # Update the gbest
             if new_fitness < self.globals.best_value:
                 self.globals.best_position = self.position.copy()

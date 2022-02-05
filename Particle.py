@@ -25,7 +25,6 @@ class Particle:
 
         self.fitness = objective_function(self.position)
 
-
     def update(self, w):
 
         global g_best_position
@@ -35,8 +34,10 @@ class Particle:
         for i in range(n_dimension):
             # maybe have R1, R2 etc?
             R = random.random()
-            b, c = 2, 2
-            new_velocity = w * self.velocity[i] + b * R * (self.personal_best_position[i] - self.position[i]) + c * R * (g_best_position[i] - self.position[i])
+            a, b, c = 0.2, 2, 2
+            new_velocity = w * self.velocity[i] + b * R * (
+                        self.personal_best_position[i] - self.position[i]) + c * R * (
+                                       g_best_position[i] - self.position[i])
             # cap velocity at
             if abs(new_velocity) > max_velocity:
                 new_velocity = np.sign(new_velocity) * max_velocity
@@ -62,7 +63,6 @@ class Particle:
 
     def get_g_best_position(self):
         return g_best_position
+
     def get_g_best_value(self):
         return g_best_value
-
-

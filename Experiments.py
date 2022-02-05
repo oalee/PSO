@@ -5,7 +5,7 @@ from InertiaStrategies import LinearInertia, RandomInertiaEvolutionaryStrategy, 
 from ObjectiveFunctions import f_rosenbrock, f_rastrigin
 from PSO import PSO
 
-objective_function = f_rastrigin
+objective_function = f_rosenbrock
 n_particles = 100
 n_iteration = 1000
 random_range = 50

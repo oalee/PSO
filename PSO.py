@@ -12,7 +12,7 @@ def f(x):
 
 
 def PSO(objective_function, n_particles, iterations, n_param,
-        inertia_strategy, guess_random_range, gradient_coeff,
+        inertia_strategy, guess_random_range, gradient_coef=0,
         seed=random.randint(0, 412312312312)):
     # initialize the particles
     particles = []
@@ -20,7 +20,7 @@ def PSO(objective_function, n_particles, iterations, n_param,
 
     globals = Globals(n_param)
     for i in range(n_particles):
-        particle = Particle(globals, objective_function, guess_random_range, gradient_coeff)
+        particle = Particle(globals, objective_function, guess_random_range, gradient_coef)
         particles.append(particle)
 
     positions = []
@@ -50,7 +50,7 @@ def PSO(objective_function, n_particles, iterations, n_param,
                                 iterations=100,
                                 inertia_strategy=RandomInertiaEvolutionaryStrategy(),
                                 guess_random_range=70,
-                                gradient_coeff=0.6
+                                gradient_coef=0.5
                                 )
 
 print(position)

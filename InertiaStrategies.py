@@ -90,6 +90,6 @@ class ChaoticDescendingInertia:
         for i in range(self.iterations):
             w = self.chaotic_descending_inertia(i, chaos)
             chaos = self.chaos_value(chaos)
-            print(i, w, chaos)
+            # print(i, w, chaos)
             result.append(w)
         return result

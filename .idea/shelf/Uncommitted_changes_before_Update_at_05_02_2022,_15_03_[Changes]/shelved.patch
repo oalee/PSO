@@ -1,0 +1,55 @@
+Index: PSO.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import numpy as np\nfrom Particle import Particle\n\n\ndef f(x):\n    # simple function\n    return 2 * x[0] ** 2 - 8 * x[0] + 1\n\n\ndef f_rosenbrock(x):\n    a = 0\n    b = 1\n    return (a - x[0]) ** 2 + b * (x[1] - x[0] ** 2) ** 2\n\n\ndef PSO(objective_function, start_location, n_particles, iterations):\n    # initialize the particles\n    particles = []\n\n    for i in range(n_particles):\n        particle = Particle(start_location, objective_function)\n        particles.append(particle)\n\n    # TODO will do this in a betterway, but it works!\n    inertia_list = np.linspace(0.2, 0.2, iterations)\n\n    # update the particles\n    for i in range(len(inertia_list)):\n        for particle in particles:\n            particle.update(inertia_list[i])\n        # print(\"iteration {} best at {}\".format(particles[0].get_g_best_value(), particles[0].get_g_best_position()))\n\n    print(\"found minimum : {} at {}\".format(particles[0].get_g_best_value(), particles[0].get_g_best_position()))\n    return particles[0].get_g_best_value(), particles[0].get_g_best_position()\n\n\n# Running the PSO\n\nvalue, position = PSO(objective_function=f_rosenbrock, start_location=[1,2], n_particles=10, iterations=100)\n# gives the wrong position but correct minimum\nprint(position)\nprint(f_rosenbrock(position))\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/PSO.py b/PSO.py
+--- a/PSO.py	(revision 84b7542b25b6a6ea4ca56c8bb78df46cc08981ab)
++++ b/PSO.py	(date 1644069810281)
+@@ -1,5 +1,5 @@
+ import numpy as np
+-from Particle import Particle
++from Particle import Particle, g_best_position
+ 
+ 
+ def f(x):
+@@ -28,7 +28,7 @@
+     for i in range(len(inertia_list)):
+         for particle in particles:
+             particle.update(inertia_list[i])
+-        # print("iteration {} best at {}".format(particles[0].get_g_best_value(), particles[0].get_g_best_position()))
++        print("iteration {} :  {} at {}".format(i,g_best_position)
+ 
+     print("found minimum : {} at {}".format(particles[0].get_g_best_value(), particles[0].get_g_best_position()))
+     return particles[0].get_g_best_value(), particles[0].get_g_best_position()
+@@ -36,7 +36,7 @@
+ 
+ # Running the PSO
+ 
+-value, position = PSO(objective_function=f_rosenbrock, start_location=[1,2], n_particles=10, iterations=100)
++value, position = PSO(objective_function=f, start_location=[0], n_particles=100, iterations=100)
+ # gives the wrong position but correct minimum
+ print(position)
+-print(f_rosenbrock(position))
++print(f(position))
+Index: Particle.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import random\nimport numpy as np\n\ng_best_position = []\ng_best_value = float(\"inf\")\n\nmax_velocity = 0.5\n\n\nclass Particle:\n    def __init__(self, start_location, objective_function):\n        global n_dimension\n        n_dimension = len(start_location)\n        self.position = []\n        self.velocity = []\n        self.personal_best_position = []\n        self.objective_function = objective_function\n\n        # initialize the position and velocity of particle\n        for i in range(n_dimension):\n            self.position.append(random.uniform(-1, 1))\n            self.personal_best_position.append(random.uniform(-1, 1))\n            self.velocity.append(random.uniform(-1, 1))\n            g_best_position.append(random.uniform(-1, 1))\n\n        self.fitness = objective_function(self.position)\n\n    def update(self, w):\n\n        global g_best_position\n        global g_best_value\n\n        # calculate and update position and velocity\n        for i in range(n_dimension):\n            # maybe have R1, R2 etc?\n            R = random.random()\n            a, b, c = 0.2, 2, 2\n            new_velocity = w * self.velocity[i] + b * R * (\n                        self.personal_best_position[i] - self.position[i]) + c * R * (\n                                       g_best_position[i] - self.position[i])\n            # cap velocity at\n            if abs(new_velocity) > max_velocity:\n                new_velocity = np.sign(new_velocity) * max_velocity\n\n            # update the velocity\n            self.velocity[i] = new_velocity\n\n            # update the position\n            new_position = self.position[i] + new_velocity\n            self.position[i] = new_position\n\n        # calculate and update personal and global best\n        new_fitness = self.objective_function(self.position)\n\n        if new_fitness < self.fitness:\n            self.personal_best_position = self.position\n            # Update the gbest\n            if new_fitness < g_best_value:\n                g_best_position = self.position\n                g_best_value = self.objective_function(self.position)\n\n        self.fitness = new_fitness\n\n    def get_g_best_position(self):\n        return g_best_position\n\n    def get_g_best_value(self):\n        return g_best_value\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Particle.py b/Particle.py
+--- a/Particle.py	(revision 84b7542b25b6a6ea4ca56c8bb78df46cc08981ab)
++++ b/Particle.py	(date 1644069179192)
+@@ -56,7 +56,7 @@
+             self.personal_best_position = self.position
+             # Update the gbest
+             if new_fitness < g_best_value:
+-                g_best_position = self.position
++                g_best_position = self.position.copy()
+                 g_best_value = self.objective_function(self.position)
+ 
+         self.fitness = new_fitness

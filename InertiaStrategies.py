@@ -7,7 +7,7 @@ import numpy as np
 
 class RandomInertiaEvolutionaryStrategy:
 
-    def __init__(self, iterations, alpha_one=0.4, alpha_two=0.9):
+    def __init__(self, iterations=None, alpha_one=0.4, alpha_two=0.9):
         # Hyper parameters
         self.alpha_one = alpha_one
         self.alpha_two = alpha_two

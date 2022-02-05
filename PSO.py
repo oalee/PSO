@@ -1,6 +1,7 @@
 import numpy as np
 
-from InertiaStrategies import ChaoticDescendingInertia, RandomInertiaEvolutionaryStrategy
+from InertiaStrategies import ChaoticDescendingInertia, RandomInertiaEvolutionaryStrategy, LinearInertia, \
+    DynamicAdaptiveStrategy
 from Particle import Particle, Globals
 import json
 

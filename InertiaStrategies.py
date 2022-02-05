@@ -16,13 +16,15 @@ class RandomInertiaEvolutionaryStrategy:
 
     def get_inertia(self, i, all_particles):
 
+        # self.r = random.uniform(0,1)
+
         probability = self.calc_probability(i, all_particles)
         if probability >= self.r:
             return self.alpha_one + self.r / 2.0
         return self.alpha_two + self.r / 2.0
 
     def calc_probability(self, i, all_particles):
-        # TODO, tune K
+
         k = 1
         if i < k:
             return 1
@@ -46,7 +48,7 @@ class RandomInertiaEvolutionaryStrategy:
     def temperature(self, i, all_particles):
         avg = self.average_fitness(i, all_particles)
         best = self.best_fitness(i, all_particles)
-        return avg / best - 1
+        return (avg / best) - 1
 
 
 class LinearInertia:
@@ -93,3 +95,28 @@ class ChaoticDescendingInertia:
             # print(i, w, chaos)
             result.append(w)
         return result
+
+
+class DynamicAdaptiveStrategy:
+
+    def __init__(self, iterations, w_start=0.9, w_end=0.2):
+        # Hyper parameters
+        self.w_start = w_start
+        self.w_end = w_end
+        self.iterations = iterations
+
+    def phi(self, i):
+        return math.exp(-i ** 2 / (2 * (self.iterations / 3) ** 2))
+
+    def calc_E(self, i, all_particles):
+        avg_fitness = self.average_fitness(i, all_particles)
+        return (1 / len(all_particles)) * sum([(particle.fitness - avg_fitness) ** 2 for particle in all_particles])
+
+    def calc_F(self, i, all_particles):
+        return 1 - (2 / math.pi) * (math.atan(self.calc_E(i, all_particles)))
+
+    def get_inertia(self, i, all_particles):
+        return self.w_end + (self.w_start - self.w_end) * self.calc_F(i, all_particles) * self.phi(i)
+
+    def average_fitness(self, i, all_particles):
+        return (1 / len(all_particles)) * (sum([particle.get_fitness_iteration(i) for particle in all_particles]))

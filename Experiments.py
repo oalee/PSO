@@ -7,11 +7,12 @@ from PSO import PSO
 
 
 n_iteration = 1000
+random_range = 10
 
 
 def plot_history(history_list):
     x = [i for i in range(n_iteration)]
-    plt.xlim(-1, 1000)
+    plt.xlim(-1, n_iteration)
     LinearInertia = history_list[0]
     RandomInertiaEvolutionaryStrategy = history_list[1]
     ChaoticDescendingInertia = history_list[2]
@@ -32,7 +33,8 @@ history, value, position = PSO(
         n_param=2,
         n_particles=10,
         iterations=n_iteration,
-        inertia_strategy=LinearInertia(iterations=n_iteration)
+        inertia_strategy=LinearInertia(iterations=n_iteration),
+        guess_random_range = random_range
     )
 
 histories.append(history)
@@ -42,7 +44,8 @@ history, value, position = PSO(
         n_param=2,
         n_particles=10,
         iterations=n_iteration,
-        inertia_strategy=RandomInertiaEvolutionaryStrategy()
+        inertia_strategy=RandomInertiaEvolutionaryStrategy(),
+        guess_random_range = random_range
     )
 
 histories.append(history)
@@ -52,7 +55,8 @@ history, value, position = PSO(
         n_param=2,
         n_particles=10,
         iterations=n_iteration,
-        inertia_strategy=ChaoticDescendingInertia(iterations=n_iteration)
+        inertia_strategy=ChaoticDescendingInertia(iterations=n_iteration),
+        guess_random_range = random_range
     )
 
 histories.append(history)
@@ -63,7 +67,8 @@ history, value, position = PSO(
         n_param=2,
         n_particles=10,
         iterations=n_iteration,
-        inertia_strategy=DynamicAdaptiveStrategy(iterations=n_iteration)
+        inertia_strategy=DynamicAdaptiveStrategy(iterations=n_iteration),
+        guess_random_range = random_range
     )
 
 

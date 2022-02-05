@@ -12,6 +12,11 @@ def f_rosenbrock(x):
     b = 1
     return (a - x[0]) ** 2 + b * (x[1] - x[0] ** 2) ** 2
 
+def f_rastrigin(x):
+    Y = (x[0] ** 2 - 10 * np.cos(2 * np.pi * x[0])) + \
+        (x[1] ** 2 - 10 * np.cos(2 * np.pi * x[1])) + 20
+    return Y
+
 
 def PSO(objective_function, start_location, n_particles, iterations):
     # initialize the particles
@@ -22,13 +27,13 @@ def PSO(objective_function, start_location, n_particles, iterations):
         particles.append(particle)
 
     # TODO will do this in a betterway, but it works!
-    inertia_list = np.linspace(0.2, 0.2, iterations)
+    inertia_list = np.linspace(0.9, 0.4, iterations)
 
     # update the particles
     for i in range(len(inertia_list)):
         for particle in particles:
             particle.update(inertia_list[i])
-        # print("iteration {} best at {}".format(particles[0].get_g_best_value(), particles[0].get_g_best_position()))
+        print("iteration {}, {} best at {}".format(i, globals.best_value, globals.best_position))
 
     print(
         "found minimum : {} at {}".format(
@@ -41,11 +46,11 @@ def PSO(objective_function, start_location, n_particles, iterations):
 # Running the PSO
 
 value, position = PSO(
-    objective_function=f_rosenbrock,
-    start_location=[1, 2],
+    objective_function=f_rastrigin,
+    start_location=[1,2],
     n_particles=10,
-    iterations=100,
+    iterations=1000,
 )
 # gives the wrong position but correct minimum
 print(position)
-print(f_rosenbrock(position))
+print(f_rastrigin(position))

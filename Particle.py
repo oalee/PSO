@@ -1,6 +1,5 @@
 import random
 import numpy as np
-import ipdb
 
 # g_best_position = []
 # g_best_value = float("inf")
@@ -34,8 +33,6 @@ class Particle:
 
     def update(self, w):
 
-        # global g_best_position
-        # global g_best_value
 
         # calculate and update position and velocity
         for i in range(self.globals.n_dimension):

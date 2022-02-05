@@ -2,12 +2,13 @@
 import matplotlib.pyplot as plt
 from InertiaStrategies import LinearInertia, RandomInertiaEvolutionaryStrategy, ChaoticDescendingInertia, \
     DynamicAdaptiveStrategy
-from ObjectiveFunctions import f_rosenbrock
+from ObjectiveFunctions import f_rosenbrock, f_rastrigin
 from PSO import PSO
 
-
+objective_function = f_rastrigin
+n_particles = 100
 n_iteration = 1000
-random_range = 10
+random_range = 50
 
 
 def plot_history(history_list):
@@ -29,9 +30,9 @@ def plot_history(history_list):
 histories = []
 
 history, value, position = PSO(
-        objective_function=f_rosenbrock,
+        objective_function= objective_function,
         n_param=2,
-        n_particles=10,
+        n_particles=n_particles,
         iterations=n_iteration,
         inertia_strategy=LinearInertia(iterations=n_iteration),
         guess_random_range = random_range
@@ -40,9 +41,9 @@ history, value, position = PSO(
 histories.append(history)
 
 history, value, position = PSO(
-        objective_function=f_rosenbrock,
+        objective_function= objective_function,
         n_param=2,
-        n_particles=10,
+        n_particles=n_particles,
         iterations=n_iteration,
         inertia_strategy=RandomInertiaEvolutionaryStrategy(),
         guess_random_range = random_range
@@ -51,9 +52,9 @@ history, value, position = PSO(
 histories.append(history)
 
 history, value, position = PSO(
-        objective_function=f_rosenbrock,
+        objective_function= objective_function,
         n_param=2,
-        n_particles=10,
+        n_particles=n_particles,
         iterations=n_iteration,
         inertia_strategy=ChaoticDescendingInertia(iterations=n_iteration),
         guess_random_range = random_range
@@ -63,9 +64,9 @@ histories.append(history)
 
 
 history, value, position = PSO(
-        objective_function=f_rosenbrock,
+        objective_function= objective_function,
         n_param=2,
-        n_particles=10,
+        n_particles=n_particles,
         iterations=n_iteration,
         inertia_strategy=DynamicAdaptiveStrategy(iterations=n_iteration),
         guess_random_range = random_range

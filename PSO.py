@@ -1,4 +1,6 @@
 import numpy as np
+
+from InertiaStrategies import ChaoticDescendingInertia, RandomInertiaEvolutionaryStrategy
 from Particle import Particle, Globals
 
 
@@ -13,7 +15,8 @@ def f_rosenbrock(x):
     return (a - x[0]) ** 2 + b * (x[1] - x[0] ** 2) ** 2
 
 
-def PSO(objective_function, start_location, n_particles, iterations):
+def PSO(objective_function, start_location, n_particles, iterations,
+        inertia_strategy):
     # initialize the particles
     particles = []
     globals = Globals(len(start_location))
@@ -21,13 +24,11 @@ def PSO(objective_function, start_location, n_particles, iterations):
         particle = Particle(globals, start_location, objective_function)
         particles.append(particle)
 
-    # TODO will do this in a betterway, but it works!
-    inertia_list = np.linspace(0.2, 0.2, iterations)
-
     # update the particles
-    for i in range(len(inertia_list)):
+    for i in range(iterations):
         for particle in particles:
-            particle.update(inertia_list[i])
+            w = inertia_strategy.get_inertia(i, particles)
+            particle.update(w)
         # print("iteration {} best at {}".format(particles[0].get_g_best_value(), particles[0].get_g_best_position()))
 
     print(
@@ -45,6 +46,7 @@ value, position = PSO(
     start_location=[1, 2],
     n_particles=10,
     iterations=100,
+    inertia_strategy=RandomInertiaEvolutionaryStrategy()
 )
 # gives the wrong position but correct minimum
 print(position)

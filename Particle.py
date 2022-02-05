@@ -1,9 +1,11 @@
 import random
 import numpy as np
-import ipdb
+
+# import ipdb
 
 # g_best_position = []
 # g_best_value = float("inf")
+from InertiaStrategies import RandomInertiaEvolutionaryStrategy
 
 max_velocity = 0.5
 
@@ -22,6 +24,7 @@ class Particle:
         self.velocity = []
         self.personal_best_position = []
         self.objective_function = objective_function
+        self.all_fitnesses = []
 
         # initialize the position and velocity of particle
         for i in range(self.globals.n_dimension):
@@ -31,6 +34,7 @@ class Particle:
             self.globals.best_position.append(random.uniform(-1, 1))
 
         self.fitness = objective_function(self.position)
+        self.all_fitnesses.append(self.fitness)
 
     def update(self, w):
 
@@ -43,9 +47,9 @@ class Particle:
             R = random.random()
             a, b, c = 0.2, 2, 2
             new_velocity = (
-                w * self.velocity[i]
-                + b * R * (self.personal_best_position[i] - self.position[i])
-                + c * R * (self.globals.best_position[i] - self.position[i])
+                    w * self.velocity[i]
+                    + b * R * (self.personal_best_position[i] - self.position[i])
+                    + c * R * (self.globals.best_position[i] - self.position[i])
             )
             # cap velocity at
             if abs(new_velocity) > max_velocity:
@@ -71,3 +75,7 @@ class Particle:
                 )
 
         self.fitness = new_fitness
+        self.all_fitnesses.append(self.fitness)
+
+    def get_fitness_iteration(self, i):
+        return self.all_fitnesses[i]

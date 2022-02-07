@@ -2,6 +2,8 @@ import random
 import numpy as np
 import ipdb
 
+from ObjectiveFunctions import f_rosenbrock, gradient_rastgirin
+
 
 def rosenbroch_gradient(x):
     a = 0
@@ -50,12 +52,14 @@ class Particle:
         # maybe have R1, R2 etc?
         R = np.random.random(2)
         b, c = 2, 2
-        gradient = rosenbroch_gradient(self.position)
+
+        gradient_func = rosenbroch_gradient if self.objective_function == f_rosenbrock else gradient_rastgirin
+        gradient = gradient_func(self.position)
         new_velocity = (
-            a * self.velocity
-            + b * R * (self.personal_best_position - self.position)
-            + c * R * (self.globals.best_position - self.position)
-            - self.d * a * gradient
+                a * self.velocity
+                + b * R * (self.personal_best_position - self.position)
+                + c * R * (self.globals.best_position - self.position)
+                - self.d * (1 - a) * gradient
         )
         # cap velocity at
         new_velocity = np.clip(new_velocity, -max_velocity, max_velocity)

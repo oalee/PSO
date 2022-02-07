@@ -1,6 +1,9 @@
 const drawPlot = async () => {
   const objectiveFuntionName = "rastrigin";
-  const rawData = await (await fetch(`f_${objectiveFuntionName}.json`)).json();
+  const rawData = await (await fetch(`${objectiveFuntionName}.json`)).json();
+  const rawDataGD = await (
+    await fetch(`${objectiveFuntionName}_gd.json`)
+  ).json();
   const minPositionX = Math.min(
     ...rawData.flatMap((x) => x.map((y) => y.position[0]))
   );
@@ -44,42 +47,34 @@ const drawPlot = async () => {
   const min = Math.min(...z_data.flatMap((r) => r));
   const max = Math.max(...z_data.flatMap((r) => r));
   const normalizeZ = (y) => (y - min) / (max - min);
-  const fixedZData = z_data.map((x) => x.map(normalizeZ));
-  const trace1 = {
-    z: fixedZData,
-    type: "surface",
-  };
-
-  /*
-	 {
-      x: 2,
-      y: 5,
-      xref: 'x',
-      yref: 'y',
-      text: 'Annotation Text',
-      showarrow: true,
-      arrowhead: 7,
-      ax: 0k,
-      ay: -40
-    }
-
-		var trace1 = {
-	x:unpack(rows, 'x1'), y: unpack(rows, 'y1'), z: unpack(rows, 'z1'),
-	mode: 'markers',
-	marker: {
-		size: 12,
-		line: {
-		color: 'rgba(217, 217, 217, 0.14)',
-		width: 0.5},
-		opacity: 0.8},
-	type: 'scatter3d'
-};
-		*/
-
   const ballShift = (max - min) / 45;
   const normalizeX = (x) => (x - minPositionX) / (maxPositionX - minPositionX);
   const normalizeY = (x) => (x - minPositionY) / (maxPositionY - minPositionY);
-  const trace2 = {
+
+  const fixedZData = z_data.map((x) => x.map(normalizeZ));
+  const surfaceTrace = {
+    z: fixedZData,
+    type: "surface",
+  };
+  const contourTrace = {
+    z: fixedZData,
+    type: "contour",
+  };
+  const contourParticleTrace = {
+    x: rawData[0].map((p) => pixDensity * normalizeY(p.position[1])),
+    y: rawData[0].map((p) => pixDensity * normalizeX(p.position[0])),
+    type: "scatter2d",
+    mode: "markers",
+    marker: {
+      size: 10,
+      line: {
+        color: "rgba(217, 217, 217, 0.14)",
+        width: 0.5,
+      },
+      opacity: 0.8,
+    },
+  };
+  const surfaceParticleTrace = {
     x: rawData[0].map((p) => pixDensity * normalizeY(p.position[1])),
     y: rawData[0].map((p) => pixDensity * normalizeX(p.position[0])),
     z: rawData[0].map((p) => normalizeZ(chosenFuntion(p.position)) + ballShift),
@@ -94,11 +89,27 @@ const drawPlot = async () => {
     },
     type: "scatter3d",
   };
-  const data = [trace1, trace2];
+  const surfaceParticleTraceGD = {
+    x: [pixDensity * normalizeY(rawDataGD[0][1])],
+    y: [pixDensity * normalizeX(rawDataGD[0][0])],
+    z: [normalizeZ(chosenFuntion(rawDataGD[0])) + ballShift],
+    mode: "markers",
+    marker: {
+      size: 4,
+      line: {
+        color: "rgba(217, 217, 217, 0.14)",
+        width: 0.5,
+      },
+      opacity: 0.8,
+    },
+    type: "scatter3d",
+  };
+
+  const data = [surfaceTrace, surfaceParticleTrace, surfaceParticleTraceGD];
   const layout = {
     title: objectiveFuntionName,
     autosize: true,
-    width: window.innerWidth,
+    width: window.innerWidth / 2.1,
     height: window.innerHeight,
     scene: {
       camera: {
@@ -115,17 +126,18 @@ const drawPlot = async () => {
       t: 90,
     },
   };
-  const plot = document.getElementById("plot");
-  await Plotly.newPlot(plot, data, layout);
+  const surfacePlot = document.getElementById("plot1");
+  const contourPlot = document.getElementById("plot2");
+  await Plotly.newPlot(contourPlot, [contourTrace, contourParticleTrace], {
+    title: objectiveFuntionName,
+    width: window.innerWidth / 2.1,
+    height: window.innerHeight,
+  });
+  await Plotly.newPlot(surfacePlot, data, layout);
   let i = 1;
   const updatePlot = async () => {
     if (i < rawData.length) {
-      //trace2['x'] = rawData[i].map(p=>pixDensity*normalizeY(p.position[1])),
-      //trace2['y'] = rawData[i].map(p=>pixDensity*normalizeX(p.position[0])),
-      //trace2['z'] = rawData[i].map(p=>normalizeZ(chosenFuntion(p.position))),
-      //await Plotly.redraw(plot)
-
-      await Plotly.animate("plot", {
+      await Plotly.animate("plot1", {
         data: [
           {
             x: rawData[i].map((p) => pixDensity * normalizeY(p.position[1])),
@@ -137,9 +149,26 @@ const drawPlot = async () => {
         ],
         traces: [1],
       });
+      particleTrace.x = rawData[i].map(
+        (p) => pixDensity * normalizeY(p.position[1])
+      );
+      particleTrace.y = rawData[i].map(
+        (p) => pixDensity * normalizeX(p.position[0])
+      );
+      Plotly.redraw("plot2");
+      /*
+        await Plotly.animate("plot2", {
+          data: [
+            {
+              x: rawData[i].map((p) => pixDensity * normalizeY(p.position[1])),
+              y: rawData[i].map((p) => pixDensity * normalizeX(p.position[0])),
+            },
+          ],
+          traces: [1],
+        });
+      */
       i += 1;
       window.requestAnimationFrame(updatePlot);
-    } else {
     }
   };
   window.requestAnimationFrame(updatePlot);

@@ -4,8 +4,13 @@ from InertiaStrategies import (
     DynamicAdaptiveStrategy,
     RandomInertiaEvolutionaryStrategy,
 )
-from ObjectiveFunctions import f_rosenbrock, f_rastrigin
+from GradientDescent import gradient_descent_op
+from ObjectiveFunctions import (
+    Rosenbrock,
+    Rastrigin,
+)
 from ParticleVectorized import Particle, Globals
+
 import json
 
 
@@ -51,22 +56,33 @@ def PSO(
             )
         global_best_history.append(globals.best_value)
 
-    with open(f"plot/{objective_function.__name__}.json", "w") as f:
+    gd_positions = gradient_descent_op(
+        iterations,
+        objective_function,
+    )
+    with open(f"plot/{objective_function.name}.json", "w") as f:
         json.dump(positions, f, indent=4)
+
+    with open(f"plot/{objective_function.name}_gd.json", "w") as f:
+        json.dump(gd_positions, f, indent=4)
+
     print(f"found minimum: {globals.best_value} at {globals.best_position}")
     return global_best_history, globals.best_value, globals.best_position
 
 
 def main():
-    for func in (f_rosenbrock, f_rastrigin):
+    for func in (Rosenbrock(), Rastrigin()):
+        iterations = 200
         history, best, position = PSO(
             objective_function=func,
             n_param=2,
-            n_particles=10,
-            iterations=200,
-            inertia_strategy=RandomInertiaEvolutionaryStrategy(),
-            guess_random_range=10,
-            gradient_coef=0.5,
+            n_particles=20,
+            iterations=iterations,
+            inertia_strategy=DynamicAdaptiveStrategy(
+                iterations
+            ),  # RandomInertiaEvolutionaryStrategy(iterations),
+            guess_random_range=20,
+            gradient_coef=0.0,
         )
 
         print(position)

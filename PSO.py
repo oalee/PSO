@@ -38,7 +38,7 @@ def PSO(
         "obj_f": objective_function,
         "n_par": n_particles,
         "iter": iterations,
-        "in_srat": inertia_strategy.__name__,
+        "in_srat": inertia_strategy,
         "rng": guess_random_range,
         "grd_coef": gradient_coef,
         "seed": seed,
@@ -117,7 +117,7 @@ def main():
             inertia_strategy=DynamicAdaptiveStrategy(
                 iterations
             ),  # RandomInertiaEvolutionaryStrategy(iterations),
-            guess_random_range=10,
+            guess_random_range=1000,
             gradient_coef=0,
             use_random_gradients=False,
         )

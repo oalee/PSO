@@ -44,6 +44,8 @@ def PSO(
     positions = []
     global_best_history = []
 
+    convergence_iteration = 1000
+
     for i in range(iterations):
         positions.append([])
         for particle in particles:
@@ -56,6 +58,8 @@ def PSO(
                 }
             )
         global_best_history.append(globals.best_value)
+        if globals.best_value < 0.001 and convergence_iteration > i:
+            convergence_iteration = i
 
     gd_positions = gradient_descent_op(
         iterations,
@@ -68,13 +72,13 @@ def PSO(
         json.dump(gd_positions, f, indent=4)
 
     print(f"found minimum: {globals.best_value} at {globals.best_position}")
-    return global_best_history, globals.best_value, globals.best_position
+    return global_best_history, globals.best_value, globals.best_position, convergence_iteration
 
 
 def main():
     for func in (Rosenbrock(), Rastrigin()):
         iterations = 200
-        history, best, position = PSO(
+        history, best, position, convergence_iteration = PSO(
             objective_function=func,
             n_param=2,
             n_particles=10,
@@ -89,6 +93,7 @@ def main():
 
         print(position)
         print(best)
+        print(convergence_iteration)
 
 
 if __name__ == "__main__":

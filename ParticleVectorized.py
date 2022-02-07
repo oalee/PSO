@@ -25,12 +25,13 @@ class Globals:
 
 class Particle:
     # D is the gradient hyper parameter
-    def __init__(self, globals, objective_function, position_range=100, d=0):
+    def __init__(self, globals, objective_function, position_range=100, d=0, use_random_gradients=False):
         self.globals = globals
         self.personal_best_position = []
         self.objective_function = objective_function
         self.all_fitnesses = []
         self.d = d
+        self.use_random_gradients = use_random_gradients
 
         # initialize the position and velocity of particle
         self.position = np.random.uniform(
@@ -55,10 +56,10 @@ class Particle:
 
         gradient = self.objective_function.gradient(self.position)
         new_velocity = (
-            a * self.velocity
-            + b * R * (self.personal_best_position - self.position)
-            + c * R * (self.globals.best_position - self.position)
-            - self.d * (1 - a) * gradient
+                a * self.velocity
+                + b * R * (self.personal_best_position - self.position)
+                + c * R * (self.globals.best_position - self.position)
+                - self.d * (1 - a) * gradient
         )
         # cap velocity at
         new_velocity = np.clip(new_velocity, -max_velocity, max_velocity)
@@ -66,8 +67,15 @@ class Particle:
         # update the velocity
         self.velocity = new_velocity
 
-        # update the position
-        self.position += new_velocity
+        if self.use_random_gradients:
+            r = random.uniform(0, 1)
+            if r < 0.2:
+                self.position = self.position - 0.2 * gradient
+            else:
+                self.position += new_velocity
+
+        else:  # update the position
+            self.position += new_velocity
 
         # calculate and update personal and global best
         new_fitness = self.objective_function(self.position)

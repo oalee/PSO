@@ -20,14 +20,15 @@ def f(x):
 
 
 def PSO(
-    objective_function,
-    n_particles,
-    iterations,
-    n_param,
-    inertia_strategy,
-    guess_random_range,
-    gradient_coef=0,
-    seed=random.randint(0, 412312312312),
+        objective_function,
+        n_particles,
+        iterations,
+        n_param,
+        inertia_strategy,
+        guess_random_range,
+        gradient_coef=0,
+        seed=random.randint(0, 412312312312),
+        use_random_gradients=False
 ):
     # initialize the particles
     particles = []
@@ -36,7 +37,7 @@ def PSO(
     globals = Globals(n_param, guess_random_range)
     for i in range(n_particles):
         particle = Particle(
-            globals, objective_function, guess_random_range, gradient_coef
+            globals, objective_function, guess_random_range, gradient_coef, use_random_gradients
         )
         particles.append(particle)
 
@@ -76,13 +77,14 @@ def main():
         history, best, position = PSO(
             objective_function=func,
             n_param=2,
-            n_particles=20,
+            n_particles=10,
             iterations=iterations,
             inertia_strategy=DynamicAdaptiveStrategy(
                 iterations
             ),  # RandomInertiaEvolutionaryStrategy(iterations),
-            guess_random_range=20,
-            gradient_coef=0.0,
+            guess_random_range=60,
+            gradient_coef=0,
+            use_random_gradients=False
         )
 
         print(position)

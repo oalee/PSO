@@ -6,6 +6,10 @@ import numpy as np
 
 
 class RandomInertiaEvolutionaryStrategy:
+
+    def __str__(self):
+        return "RandomInertiaEvolutionaryStrategy"
+
     def __init__(self, iterations=None, alpha_one=0.4, alpha_two=0.9):
         # Hyper parameters
         self.alpha_one = alpha_one
@@ -47,10 +51,16 @@ class RandomInertiaEvolutionaryStrategy:
     def temperature(self, i, all_particles):
         avg = self.average_fitness(i, all_particles)
         best = self.best_fitness(i, all_particles)
+        if best == 0:
+            best = 1
         return (avg / best) - 1
 
 
 class LinearInertia:
+
+    def __str__(self):
+        return "LinearInertia"
+
     def __init__(self, iterations, w_start=0.9, w_end=0.4):
         self.w_start = w_start
         self.w_end = w_end
@@ -65,6 +75,10 @@ class LinearInertia:
 
 
 class ChaoticDescendingInertia:
+
+    def __str__(self):
+        return "ChaoticDescendingInertia"
+
     def __init__(self, iterations, initial_chaos=0.9, w_start=0.9, w_end=0.4):
         self.initial_chaos = initial_chaos
         self.chaos = initial_chaos
@@ -79,7 +93,7 @@ class ChaoticDescendingInertia:
 
     def chaotic_descending_inertia(self, i, chaos):
         return (self.w_start - self.w_end) * (
-            (self.iterations - i) / self.iterations
+                (self.iterations - i) / self.iterations
         ) + self.w_end * chaos
 
     def get_inertia(self, i, all_particles):
@@ -97,6 +111,10 @@ class ChaoticDescendingInertia:
 
 
 class DynamicAdaptiveStrategy:
+
+    def __str__(self):
+        return "DynamicAdaptiveStrategy"
+
     def __init__(self, iterations, w_start=0.9, w_end=0.2):
         # Hyper parameters
         self.w_start = w_start

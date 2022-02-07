@@ -1,5 +1,7 @@
 import random
 
+import numpy as np
+
 from InertiaStrategies import (
     DynamicAdaptiveStrategy,
     RandomInertiaEvolutionaryStrategy,
@@ -13,6 +15,7 @@ from ParticleVectorized import Particle, Globals
 
 import json
 
+epsilon = 0.00000001
 
 def f(x):
     # simple function
@@ -27,11 +30,12 @@ def PSO(
         inertia_strategy,
         guess_random_range,
         gradient_coef=0,
-        seed=random.randint(0, 412312312312),
+        seed=random.randint(0, 1241231),
         use_random_gradients=False
 ):
     # initialize the particles
     particles = []
+    np.random.seed(seed)
     random.seed(seed)
 
     globals = Globals(n_param, guess_random_range)
@@ -58,7 +62,7 @@ def PSO(
                 }
             )
         global_best_history.append(globals.best_value)
-        if globals.best_value < 0.001 and convergence_iteration > i:
+        if globals.best_value < epsilon and convergence_iteration > i:
             convergence_iteration = i
 
     gd_positions = gradient_descent_op(

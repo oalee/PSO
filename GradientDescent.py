@@ -14,11 +14,11 @@ def rosenbroch_gradient(x):
     return [dx1, dx2]
 
 
-def gradient_descent_op(iterations, alpha=0.1,
-                        initial_random_guess=10
-                        ):
-    position = [random.uniform(-initial_random_guess, initial_random_guess),
-                random.uniform(-initial_random_guess, initial_random_guess)]
+def gradient_descent_op(iterations, alpha=0.1, initial_random_guess=10):
+    position = [
+        random.uniform(-initial_random_guess, initial_random_guess),
+        random.uniform(-initial_random_guess, initial_random_guess),
+    ]
     MAX_GRADIENT = 100
 
     for i in range(iterations):
@@ -31,7 +31,7 @@ def gradient_descent_op(iterations, alpha=0.1,
         position[0] = position[0] - alpha * gradient[0]
         position[1] = position[1] - alpha * gradient[1]
 
-    print('gradient descent')
+    print("gradient descent")
     print(position, f_rosenbrock(position))
 
 

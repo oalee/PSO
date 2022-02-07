@@ -50,10 +50,10 @@ class Particle:
             b, c = 2, 2
             gradient = rosenbroch_gradient(self.position)
             new_velocity = (
-                    a * self.velocity[i]
-                    + b * R * (self.personal_best_position[i] - self.position[i])
-                    + c * R * (self.globals.best_position[i] - self.position[i])
-                    - self.d * a * gradient[i]
+                a * self.velocity[i]
+                + b * R * (self.personal_best_position[i] - self.position[i])
+                + c * R * (self.globals.best_position[i] - self.position[i])
+                - self.d * a * gradient[i]
             )
             # cap velocity at
             if abs(new_velocity) > max_velocity:
@@ -74,9 +74,7 @@ class Particle:
             # Update the gbest
             if new_fitness < self.globals.best_value:
                 self.globals.best_position = self.position.copy()
-                self.globals.best_value = self.objective_function(
-                    self.position
-                )
+                self.globals.best_value = self.objective_function(self.position)
 
         self.fitness = new_fitness
         self.all_fitnesses.append(self.fitness)

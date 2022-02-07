@@ -6,7 +6,6 @@ import numpy as np
 
 
 class RandomInertiaEvolutionaryStrategy:
-
     def __init__(self, iterations=None, alpha_one=0.4, alpha_two=0.9):
         # Hyper parameters
         self.alpha_one = alpha_one
@@ -35,12 +34,12 @@ class RandomInertiaEvolutionaryStrategy:
         if best_before <= now_best:
             return 1
 
-        return math.exp(
-            - (best_before - now_best) / self.temperature(i, all_particles)
-        )
+        return math.exp(-(best_before - now_best) / self.temperature(i, all_particles))
 
     def average_fitness(self, i, all_particles):
-        return (1 / len(all_particles)) * (sum([particle.get_fitness_iteration(i) for particle in all_particles]))
+        return (1 / len(all_particles)) * (
+            sum([particle.get_fitness_iteration(i) for particle in all_particles])
+        )
 
     def best_fitness(self, i, all_particles):
         return min([particle.get_fitness_iteration(i) for particle in all_particles])
@@ -52,7 +51,6 @@ class RandomInertiaEvolutionaryStrategy:
 
 
 class LinearInertia:
-
     def __init__(self, iterations, w_start=0.9, w_end=0.4):
         self.w_start = w_start
         self.w_end = w_end
@@ -67,7 +65,6 @@ class LinearInertia:
 
 
 class ChaoticDescendingInertia:
-
     def __init__(self, iterations, initial_chaos=0.9, w_start=0.9, w_end=0.4):
         self.initial_chaos = initial_chaos
         self.chaos = initial_chaos
@@ -81,7 +78,9 @@ class ChaoticDescendingInertia:
         return u * prev_chaos * (1 - prev_chaos)
 
     def chaotic_descending_inertia(self, i, chaos):
-        return (self.w_start - self.w_end) * ((self.iterations - i) / self.iterations) + self.w_end * chaos
+        return (self.w_start - self.w_end) * (
+            (self.iterations - i) / self.iterations
+        ) + self.w_end * chaos
 
     def get_inertia(self, i, all_particles):
         return self.inertia[i]
@@ -98,7 +97,6 @@ class ChaoticDescendingInertia:
 
 
 class DynamicAdaptiveStrategy:
-
     def __init__(self, iterations, w_start=0.9, w_end=0.2):
         # Hyper parameters
         self.w_start = w_start
@@ -106,17 +104,23 @@ class DynamicAdaptiveStrategy:
         self.iterations = iterations
 
     def phi(self, i):
-        return math.exp(-i ** 2 / (2 * (self.iterations / 3) ** 2))
+        return math.exp(-(i ** 2) / (2 * (self.iterations / 3) ** 2))
 
     def calc_E(self, i, all_particles):
         avg_fitness = self.average_fitness(i, all_particles)
-        return (1 / len(all_particles)) * sum([(particle.fitness - avg_fitness) ** 2 for particle in all_particles])
+        return (1 / len(all_particles)) * sum(
+            [(particle.fitness - avg_fitness) ** 2 for particle in all_particles]
+        )
 
     def calc_F(self, i, all_particles):
         return 1 - (2 / math.pi) * (math.atan(self.calc_E(i, all_particles)))
 
     def get_inertia(self, i, all_particles):
-        return self.w_end + (self.w_start - self.w_end) * self.calc_F(i, all_particles) * self.phi(i)
+        return self.w_end + (self.w_start - self.w_end) * self.calc_F(
+            i, all_particles
+        ) * self.phi(i)
 
     def average_fitness(self, i, all_particles):
-        return (1 / len(all_particles)) * (sum([particle.get_fitness_iteration(i) for particle in all_particles]))
+        return (1 / len(all_particles)) * (
+            sum([particle.get_fitness_iteration(i) for particle in all_particles])
+        )

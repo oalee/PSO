@@ -1,7 +1,10 @@
-
 import matplotlib.pyplot as plt
-from InertiaStrategies import LinearInertia, RandomInertiaEvolutionaryStrategy, ChaoticDescendingInertia, \
-    DynamicAdaptiveStrategy
+from InertiaStrategies import (
+    LinearInertia,
+    RandomInertiaEvolutionaryStrategy,
+    ChaoticDescendingInertia,
+    DynamicAdaptiveStrategy,
+)
 from ObjectiveFunctions import f_rosenbrock, f_rastrigin
 from PSO import PSO
 
@@ -18,59 +21,64 @@ def plot_history(history_list):
     RandomInertiaEvolutionaryStrategy = history_list[1]
     ChaoticDescendingInertia = history_list[2]
     DynamicAdaptiveStrategy = history_list[3]
-    plt.plot(x, LinearInertia, label = "Linear Inertia")
-    plt.plot(x, RandomInertiaEvolutionaryStrategy, label = "Random Inertia Evolutionary Strategy")
-    plt.plot(x, ChaoticDescendingInertia, label = "Chaotic Descending Inertia")
-    plt.plot(x, DynamicAdaptiveStrategy, label = "Dynamic Adaptive Strategy")
-    plt.xlabel('iteration')
-    plt.ylabel('global best value')
+    plt.plot(x, LinearInertia, label="Linear Inertia")
+    plt.plot(
+        x,
+        RandomInertiaEvolutionaryStrategy,
+        label="Random Inertia Evolutionary Strategy",
+    )
+    plt.plot(x, ChaoticDescendingInertia, label="Chaotic Descending Inertia")
+    plt.plot(x, DynamicAdaptiveStrategy, label="Dynamic Adaptive Strategy")
+    plt.xlabel("iteration")
+    plt.ylabel("global best value")
     plt.legend()
     plt.show()
+
 
 histories = []
 
 history, value, position = PSO(
-        objective_function= objective_function,
-        n_param=2,
-        n_particles=n_particles,
-        iterations=n_iteration,
-        inertia_strategy=LinearInertia(iterations=n_iteration),
-        guess_random_range = random_range
-    )
+    objective_function=objective_function,
+    n_param=2,
+    n_particles=n_particles,
+    iterations=n_iteration,
+    inertia_strategy=LinearInertia(iterations=n_iteration),
+    guess_random_range=random_range,
+)
 
 histories.append(history)
 
 history, value, position = PSO(
-        objective_function= objective_function,
-        n_param=2,
-        n_particles=n_particles,
-        iterations=n_iteration,
-        inertia_strategy=RandomInertiaEvolutionaryStrategy(),
-        guess_random_range = random_range
-    )
+    objective_function=objective_function,
+    n_param=2,
+    n_particles=n_particles,
+    iterations=n_iteration,
+    inertia_strategy=RandomInertiaEvolutionaryStrategy(),
+    guess_random_range=random_range,
+)
 
 histories.append(history)
 
 history, value, position = PSO(
-        objective_function= objective_function,
-        n_param=2,
-        n_particles=n_particles,
-        iterations=n_iteration,
-        inertia_strategy=ChaoticDescendingInertia(iterations=n_iteration),
-        guess_random_range = random_range
-    )
+    objective_function=objective_function,
+    n_param=2,
+    n_particles=n_particles,
+    iterations=n_iteration,
+    inertia_strategy=ChaoticDescendingInertia(iterations=n_iteration),
+    guess_random_range=random_range,
+)
 
 histories.append(history)
 
 
 history, value, position = PSO(
-        objective_function= objective_function,
-        n_param=2,
-        n_particles=n_particles,
-        iterations=n_iteration,
-        inertia_strategy=DynamicAdaptiveStrategy(iterations=n_iteration),
-        guess_random_range = random_range
-    )
+    objective_function=objective_function,
+    n_param=2,
+    n_particles=n_particles,
+    iterations=n_iteration,
+    inertia_strategy=DynamicAdaptiveStrategy(iterations=n_iteration),
+    guess_random_range=random_range,
+)
 
 
 histories.append(history)

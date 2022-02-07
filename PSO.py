@@ -5,7 +5,7 @@ from InertiaStrategies import (
     RandomInertiaEvolutionaryStrategy,
 )
 from ObjectiveFunctions import f_rosenbrock, f_rastrigin
-from Particle import Particle, Globals
+from ParticleVectorized import Particle, Globals
 import json
 
 
@@ -28,7 +28,7 @@ def PSO(
     particles = []
     random.seed(seed)
 
-    globals = Globals(n_param)
+    globals = Globals(n_param, guess_random_range)
     for i in range(n_particles):
         particle = Particle(
             globals, objective_function, guess_random_range, gradient_coef
@@ -44,7 +44,10 @@ def PSO(
             w = inertia_strategy.get_inertia(i, particles)
             particle.update(w)
             positions[i].append(
-                {"position": particle.position, "velocity": particle.velocity}
+                {
+                    "position": particle.position.tolist(),
+                    "velocity": particle.velocity.tolist(),
+                }
             )
         global_best_history.append(globals.best_value)
 
@@ -55,18 +58,19 @@ def PSO(
 
 
 def main():
-    history, best, position = PSO(
-        objective_function=f_rosenbrock,
-        n_param=2,
-        n_particles=10,
-        iterations=100,
-        inertia_strategy=RandomInertiaEvolutionaryStrategy(),
-        guess_random_range=70,
-        gradient_coef=0.5,
-    )
+    for func in (f_rosenbrock, f_rastrigin):
+        history, best, position = PSO(
+            objective_function=func,
+            n_param=2,
+            n_particles=10,
+            iterations=200,
+            inertia_strategy=RandomInertiaEvolutionaryStrategy(),
+            guess_random_range=10,
+            gradient_coef=0.5,
+        )
 
-    print(position)
-    print(best)
+        print(position)
+        print(best)
 
 
 if __name__ == "__main__":

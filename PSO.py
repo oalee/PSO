@@ -86,9 +86,9 @@ def main():
             inertia_strategy=DynamicAdaptiveStrategy(
                 iterations
             ),  # RandomInertiaEvolutionaryStrategy(iterations),
-            guess_random_range=60,
+            guess_random_range=200,
             gradient_coef=0,
-            use_random_gradients=False
+            use_random_gradients=True
         )
 
         print(position)

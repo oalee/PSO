@@ -24,7 +24,7 @@ def gradient_descent_op(
 
         position[0] = position[0] - alpha * gradient[0]
         position[1] = position[1] - alpha * gradient[1]
-        positions.append(position)
+        positions.append(position.copy())
 
     print("gradient descent")
     print(position, function(position))

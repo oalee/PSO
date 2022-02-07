@@ -17,22 +17,34 @@ import json
 
 epsilon = 0.00000001
 
+
 def f(x):
     # simple function
     return 2 * x[0] ** 2 - 8 * x[0] + 1
 
 
 def PSO(
-        objective_function,
-        n_particles,
-        iterations,
-        n_param,
-        inertia_strategy,
-        guess_random_range,
-        gradient_coef=0,
-        seed=random.randint(0, 1241231),
-        use_random_gradients=False
+    objective_function,
+    n_particles,
+    iterations,
+    n_param,
+    inertia_strategy,
+    guess_random_range,
+    gradient_coef=0,
+    seed=random.randint(0, 1241231),
+    use_random_gradients=False,
 ):
+    params = {
+        "obj_f": objective_function,
+        "n_par": n_particles,
+        "iter": iterations,
+        "in_srat": inertia_strategy.__name__,
+        "rng": guess_random_range,
+        "grd_coef": gradient_coef,
+        "seed": seed,
+        "rnd_grad": use_random_gradients,
+    }
+
     # initialize the particles
     particles = []
     np.random.seed(seed)
@@ -41,7 +53,11 @@ def PSO(
     globals = Globals(n_param, guess_random_range)
     for i in range(n_particles):
         particle = Particle(
-            globals, objective_function, guess_random_range, gradient_coef, use_random_gradients
+            globals,
+            objective_function,
+            guess_random_range,
+            gradient_coef,
+            use_random_gradients,
         )
         particles.append(particle)
 
@@ -69,14 +85,25 @@ def PSO(
         iterations,
         objective_function,
     )
-    with open(f"plot/{objective_function.name}.json", "w") as f:
+    with open(
+        f"plot/data/{json.dumps(params, default=str)}.json",
+        "w",
+    ) as f:
         json.dump(positions, f, indent=4)
 
-    with open(f"plot/{objective_function.name}_gd.json", "w") as f:
-        json.dump(gd_positions, f, indent=4)
+    with open(
+        f"plot/data/{json.dumps(params, default=str)}_gd.json",
+        "w",
+    ) as f:
+        json.dump([[{"position": p}] for p in gd_positions], f, indent=4)
 
     print(f"found minimum: {globals.best_value} at {globals.best_position}")
-    return global_best_history, globals.best_value, globals.best_position, convergence_iteration
+    return (
+        global_best_history,
+        globals.best_value,
+        globals.best_position,
+        convergence_iteration,
+    )
 
 
 def main():
@@ -90,9 +117,9 @@ def main():
             inertia_strategy=DynamicAdaptiveStrategy(
                 iterations
             ),  # RandomInertiaEvolutionaryStrategy(iterations),
-            guess_random_range=200,
+            guess_random_range=10,
             gradient_coef=0,
-            use_random_gradients=True
+            use_random_gradients=False,
         )
 
         print(position)

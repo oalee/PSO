@@ -10,7 +10,8 @@ def f(x):
 
 class Rosenbrock:
     name = "rosenbrock"
-
+    def __str__(self):
+        return self.name
     def __call__(self, x):
         a = 0
         b = 1
@@ -26,6 +27,8 @@ class Rosenbrock:
 
 class Rastrigin:
     name = "rastrigin"
+    def __str__(self):
+        return self.name
 
     def __call__(self, x):
         value = (

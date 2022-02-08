@@ -38,7 +38,7 @@ const getPlotter = async (fileNames, divName, objectiveFunctionName, type = 'con
     const minPositionX = getMinPositionX(data);
     const minPositionY = getMinPositionY(data);
     const z_data = [];
-    const pixDensity = 150;
+    const pixDensity = 250;
     const xStep = (maxPositionX - minPositionX) / pixDensity;
     const yStep = (maxPositionY - minPositionY) / pixDensity;
     for (let i = 0; i < pixDensity; i++) {
@@ -61,7 +61,7 @@ const getPlotter = async (fileNames, divName, objectiveFunctionName, type = 'con
         z: fixedZData,
         type: type === "contour" ? 'contour' : 'surface',
     };
-    const dataToTrace = (dati, type = 'contour') => {
+    const dataToTrace = (dati, type) => {
         const result = {
             x: dati.map((p) => pixDensity * normalizeY(p.position[1])),
             y: dati.map((p) => pixDensity * normalizeX(p.position[0])),
@@ -87,12 +87,9 @@ const getPlotter = async (fileNames, divName, objectiveFunctionName, type = 'con
         return [max, min];
     };
     const contourParticleTrace = dataToTrace(data[0], type);
-    if (type === 'surface') {
-        //debugger;
-    }
     const traces = [contourTrace, contourParticleTrace];
     if (fileNames.length > 1) {
-        traces.push(dataToTrace(allData[1][0]));
+        traces.push(dataToTrace(allData[1][0], type));
     }
     const contourPlot = document.getElementById(divName);
     await Plotly.newPlot(contourPlot, traces, {

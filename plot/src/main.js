@@ -21,3 +21,4 @@ window.changeAnimation = async (fileName) => {
     };
     window.requestAnimationFrame(animate);
 };
+changeAnimation('rosenbrock');

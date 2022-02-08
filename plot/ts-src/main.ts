@@ -26,3 +26,5 @@ window.changeAnimation = async (fileName:string) => {
   }
   window.requestAnimationFrame(animate)
 }
+
+changeAnimation('rosenbrock')

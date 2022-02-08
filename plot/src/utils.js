@@ -37,6 +37,7 @@ const getPlotter = async (fileNames, divName, objectiveFunctionName, type = 'con
     const maxPositionY = getMaxPositionY(data);
     const minPositionX = getMinPositionX(data);
     const minPositionY = getMinPositionY(data);
+    const clip = (x, a) => x < 0 ? 0 : (x <= a ? x : a);
     const z_data = [];
     const pixDensity = 250;
     const xStep = (maxPositionX - minPositionX) / pixDensity;
@@ -77,7 +78,7 @@ const getPlotter = async (fileNames, divName, objectiveFunctionName, type = 'con
             }
         };
         if (type === 'surface') {
-            result['z'] = dati.map((p) => normalizeZ(objectiveFunction(p.position)) + 0.07);
+            result['z'] = dati.map((p) => normalizeZ(objectiveFunction(p.position)) + 0.01);
         }
         return result;
     };
@@ -115,13 +116,13 @@ const getPlotter = async (fileNames, divName, objectiveFunctionName, type = 'con
                 contourParticleTrace.x = getValues(1, data[i]);
                 contourParticleTrace.y = getValues(0, data[i]);
                 if (type === 'surface') {
-                    contourParticleTrace['z'] = data[i].map((p) => normalizeZ(objectiveFunction(p.position)) + 0.07);
+                    contourParticleTrace['z'] = data[i].map((p) => normalizeZ(objectiveFunction(p.position)) + 0.01);
                 }
                 if (allData.length > 1) {
-                    traces.at(-1).x = getValues(0, allData.at(1)[i]);
-                    traces.at(-1).y = getValues(1, allData.at(1)[i]);
+                    traces.at(-1).x = getValues(0, allData.at(1)[i]).map(x => clip(x, fixedZData.length));
+                    traces.at(-1).y = getValues(1, allData.at(1)[i]).map(x => clip(x, fixedZData.length));
                     if (type === 'surface') {
-                        traces.at(-1)['z'] = allData.at(1)[i].map((p) => normalizeZ(objectiveFunction(p.position)) + 0.07);
+                        traces.at(-1)['z'] = allData.at(1)[i].map((p) => clip(normalizeZ(objectiveFunction(p.position)), 1 - 0.01) + 0.01);
                     }
                 }
                 await Plotly.redraw(contourPlot);

@@ -59,6 +59,7 @@ const getPlotter = async (
   const maxPositionY = getMaxPositionY(data)
   const minPositionX = getMinPositionX(data)
   const minPositionY = getMinPositionY(data)
+  const clip = (x:number, a:number) => x <= a ? x : a
   const z_data = [];
   const pixDensity = 250;
   const xStep = (maxPositionX - minPositionX) / pixDensity;
@@ -145,8 +146,8 @@ const getPlotter = async (
           contourParticleTrace['z'] = data[i].map((p) => normalizeZ(objectiveFunction(p.position)) + 0.07)
         }
         if (allData.length > 1){
-          traces.at(-1)!.x = getValues(0, allData.at(1)[i])
-          traces.at(-1)!.y = getValues(1, allData.at(1)[i])
+          traces.at(-1)!.x = getValues(0, allData.at(1)[i]).map(x=>clip(x, fixedZData.length))
+          traces.at(-1)!.y = getValues(1, allData.at(1)[i]).map(x=>clip(x, fixedZData.length))
           if (type === 'surface'){
             traces.at(-1)['z'] = allData.at(1)[i].map((p) => normalizeZ(objectiveFunction(p.position)) + 0.07)
           }

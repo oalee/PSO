@@ -4,7 +4,7 @@ import numpy as np
 
 from InertiaStrategies import (
     DynamicAdaptiveStrategy,
-    RandomInertiaEvolutionaryStrategy,
+    RandomInertiaEvolutionaryStrategy, LinearInertia, ChaoticDescendingInertia,
 )
 from GradientDescent import gradient_descent_op
 from ObjectiveFunctions import (
@@ -104,7 +104,7 @@ def PSO(
     ) as f:
         json.dump([[{"position": p}] for p in gd_positions], f, indent=4)
 
-    print(f"found minimum: {globals.best_value} at {globals.best_position}")
+    print(f"found minimum of {objective_function.name}: {globals.best_value} at {globals.best_position}")
     return (
         global_best_history,
         globals.best_value,
@@ -115,23 +115,24 @@ def PSO(
 
 def main():
     for func in (Rosenbrock(), Rastrigin()):
-        iterations = 100
+        iterations = 200
         history, best, position, convergence_iteration = PSO(
             objective_function=func,
             n_param=2,
-            n_particles=20,
+            n_particles=30,
             iterations=iterations,
-            inertia_strategy=DynamicAdaptiveStrategy(
+            inertia_strategy=LinearInertia(
                 iterations
             ),  # RandomInertiaEvolutionaryStrategy(iterations),
-            guess_random_range=10,
+            guess_random_range=1,
             gradient_coef=0,
             use_random_gradients=False,
+            seed=random.randint(1,12000)
         )
 
-        print(position)
-        print(best)
-        print(convergence_iteration)
+        # print(position)
+        # print(best)
+        # print(convergence_iteration)
 
 
 if __name__ == "__main__":

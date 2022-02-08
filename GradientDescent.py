@@ -6,13 +6,13 @@ from InertiaStrategies import RandomInertiaEvolutionaryStrategy
 
 
 def gradient_descent_op(
-    iterations, function, alpha=0.1, initial_random_guess=10
+    iterations, function, alpha=0.1, initial_random_guess=1
 ):
     position = [
         random.uniform(-initial_random_guess, initial_random_guess),
         random.uniform(-initial_random_guess, initial_random_guess),
     ]
-    MAX_GRADIENT = 100
+    MAX_GRADIENT = 1
     positions = [position]
 
     for i in range(iterations):
@@ -26,8 +26,8 @@ def gradient_descent_op(
         position[1] = position[1] - alpha * gradient[1]
         positions.append(position.copy())
 
-    print("gradient descent")
-    print(position, function(position))
+    # print("gradient descent")
+    # print(position, function(position))
     return positions
 
 

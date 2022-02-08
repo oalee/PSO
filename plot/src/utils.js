@@ -16,8 +16,8 @@ const getMaxPositionX = (data) => Math.max(...data.flatMap((x) => x.map((y) => y
 const getMaxPositionY = (data) => Math.max(...data.flatMap((x) => x.map((y) => y.position[1])));
 const rastrigin = (x) => x.reduce((acc, val) => acc + Math.pow(val, 2) - 10 * Math.cos(2 * Math.PI * val), 0) + 20;
 const rosenbrock = (x) => {
-    const a = 0;
-    const b = 1;
+    const a = 1;
+    const b = 100;
     return Math.pow(a - x[0], 2) + b * Math.pow(x[1] - Math.pow(x[0], 2), 2);
 };
 const objectiveFunctions = {

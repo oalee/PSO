@@ -47,7 +47,7 @@ for func in (Rosenbrock(), Rastrigin()):
             guess_random_range=10,
             gradient_coef=0.2,
             use_random_gradients=True,
-            seed=rand.randint(0, 12412)
+            seed=rand.randint(0, 1241231)
         )
         total += convergence_iteration
 

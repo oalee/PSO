@@ -93,13 +93,13 @@ def PSO(
         .replace("}", "")
     )
     with open(
-        f"plot/data/{file_name}.json",
+        f"plot/data/{objective_function.name}.json",
         "w",
     ) as f:
         json.dump(positions, f, indent=4)
 
     with open(
-        f"plot/data/{file_name}_gd.json",
+        f"plot/data/{objective_function.name}_gd.json",
         "w",
     ) as f:
         json.dump([[{"position": p}] for p in gd_positions], f, indent=4)
@@ -115,11 +115,11 @@ def PSO(
 
 def main():
     for func in (Rosenbrock(), Rastrigin()):
-        iterations = 40
+        iterations = 100
         history, best, position, convergence_iteration = PSO(
             objective_function=func,
             n_param=2,
-            n_particles=10,
+            n_particles=20,
             iterations=iterations,
             inertia_strategy=DynamicAdaptiveStrategy(
                 iterations

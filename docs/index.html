@@ -1,0 +1,40 @@
+<html>
+  <head>
+    <script src="https://cdn.plot.ly/plotly-2.9.0.min.js"></script>
+    <style>
+    /*
+      #plot1 {
+        display: inline-block;
+        margin-right: 0px;
+      }
+      #plot2 {
+        display: inline-block;
+      }
+      */
+    </style>
+  </head>
+  <body style='text-align:center'>
+    <table>
+      <tr>
+        <td>
+          <select onchange='changeAnimation(this.value)'>
+            <option value='rosenbrock'>rosenbrock</option>
+            <option value='rastrigin'>rastrigin</option>
+          </<select>
+        </td>
+        <td>
+          <div>Iteration:<div id='iteration'></div></div>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <div id="plot1" style="width: 50%; height: auto"></div>
+        </td>
+        <td>
+          <div id="plot2" style="width: 50%; height: auto"></div>
+        </td>
+      </tr>
+    <table>
+    <script type="module" src="./src/main.js"></script>
+  </body>
+</html>

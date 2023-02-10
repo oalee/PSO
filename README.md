@@ -1,8 +1,19 @@
-# Particle Swarm Optimization and Gradient Descent
+### Particle Swarm Optimization (PSO) and Gradient Descent (GD)
 Particle Swarm Optimization(PSO) is an optimization method to find the global minimum of a function using multiple particles, velocity and information sharing between the particles about their knowledge of closet minimum. Gradient Descent uses the gradient of the function to update it position and hopefully reach the global minima. Gradient Descent falls short to PSO when we have a non-convex function with large spaces of local minimas, while as the PSO can find the global minima, GD cannot converge using the Rosenbroch or Rastigirn function.
 
-# Running
-For running this project, you need to run the PSO.py via python 3 (`python PSO.py`), note that the hyperparameters are hardcoded in the main method of the PSO, by changing the parameters such as the range initial position of the particle and running the `PSO.py`, a json file will be generated. To run the visualization of the particles and the objective function, you can use a static file server on the `docs` folder, such as:
+### Running
+For running the code, you need to have python3 and optionally yerbamate installed. Then you can run the following commands:
+```
+pip install yerbamate
+pip install -r requirements.txt
+mate summary # to see the summary of the experiments
+mate run pso FinalExperiment
+<!-- or use pure python -->
+python -m pso.experiments.FinalExperiment
+<!-- or run other experimets -->
+mate rastgirin pso exp
+
+To run the visualization, you need to have python3 and http.server installed. Then you can run the following commands:
 ```
 cd /path/to/project
 cd docs
@@ -11,10 +22,10 @@ python -m http.server
 
 Note that the green particle is the visualization for Gradient Descent position and the orange particles are PSO particles.
 
-# Live version
-You can find the live version on [this](https://lrhm.github.io/particle-swarm-optimization-and-gradient-descent/) link. 
+### Live version
+You can find the live version on [this](https://oalee.github.io/particle-swarm-optimization-and-gradient-descent/) link. 
 
-# Parameters
+### Parameters
 Here is the list of the parameters used in our PSO:
 * Iterations: The number of iterations used for both PSO and GD.
 

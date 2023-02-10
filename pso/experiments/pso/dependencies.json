@@ -1,0 +1,8 @@
+{
+    "dependencies": [
+        "https://github.com/oalee/particle-swarm-optimization-and-gradient-descent/tree/main/pso/models/pso/inertia_strategies",
+        "https://github.com/oalee/particle-swarm-optimization-and-gradient-descent/tree/main/pso/models/pso/ObjectiveFunctions",
+        "https://github.com/oalee/particle-swarm-optimization-and-gradient-descent/tree/main/pso/models/pso"
+    ],
+    "env": {}
+}

@@ -12,6 +12,7 @@ mate run pso FinalExperiment
 python -m pso.experiments.FinalExperiment
 <!-- or run other experimets -->
 mate rastgirin pso exp
+```
 
 To run the visualization, you need to have python3 and http.server installed. Then you can run the following commands:
 ```
@@ -26,7 +27,7 @@ Note that the green particle is the visualization for Gradient Descent position 
 You can find the live version on [this](https://oalee.github.io/particle-swarm-optimization-and-gradient-descent/) link. 
 
 ### Parameters
-Here is the list of the parameters used in our PSO:
+The PSO algorithm uses the following parameters:
 * Iterations: The number of iterations used for both PSO and GD.
 
 * Objective Function: The objective function for the optimization problem, can be Rastigin or Rosenbroch  or any objective function class that implements the nessecary methods defined in `ObjectiveFunctions.py`

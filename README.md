@@ -1,6 +1,15 @@
 ### Particle Swarm Optimization (PSO) and Gradient Descent (GD)
 Particle Swarm Optimization(PSO) is an optimization method to find the global minimum of a function using multiple particles, velocity and information sharing between the particles about their knowledge of closet minimum. Gradient Descent uses the gradient of the function to update it position and hopefully reach the global minima. Gradient Descent falls short to PSO when we have a non-convex function with large spaces of local minimas, while as the PSO can find the global minima, GD cannot converge using the Rosenbroch or Rastigirn function.
 
+## Exported Modules
+
+This code modules are exported from this repository, and can be installed using [Yerbamate](github.com/oalee/yerbamate).
+
+|    | type        | name   | url                                                                                                     | short_url                                                                  | dependencies                                                                                                                                     |
+|----|-------------|--------|---------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------|
+| 0  | models      | pso    | https://github.com/oalee/particle-swarm-optimization-and-gradient-descent/tree/main/pso/models/pso      | oalee/particle-swarm-optimization-and-gradient-descent/pso/models/pso      | ['matplotlib~=3.6.2', 'numpy~=1.24.2', 'ipdb~=0.13.9']                                                                                           |
+| 1  | experiments | pso    | https://github.com/oalee/particle-swarm-optimization-and-gradient-descent/tree/main/pso/experiments/pso | oalee/particle-swarm-optimization-and-gradient-descent/pso/experiments/pso | ['matplotlib~=3.6.2', 'yerbamate~=0.9.21', 'https://github.com/oalee/particle-swarm-optimization-and-gradient-descent/tree/main/pso/models/pso'] |
+
 ### Running
 For running the code, you need to have python3 and optionally yerbamate installed. Then you can run the following commands:
 ```
